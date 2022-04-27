@@ -1,0 +1,66 @@
+#Graph
+#A graph is a pictorial representation of a set of objects 
+# where some pairs of objects are connected by links. 
+# The interconnected objects are represented by points termed as vertices,
+# and the links that connect the vertices are called edges.
+class Graph(object):
+    def __init__(self, graph_dict=None):
+        if graph_dict == None:
+            graph_dict = {}
+        self._graph_dict = graph_dict
+    def edges(self, Vertice):
+        return self._graph_dict[Vertice]        
+    def all_Vertices(self):
+        return set(self._graph_dict.keys())
+    def all_edges(self):
+        return self.__generate_edges()
+    def add_vertex(self, vertex):
+        if vertex not in self._graph_dict:
+            self._graph_dict[vertex] = []
+    def add_edge(self, Edge):
+        Edge = set(Edge)
+        vertex1, vertex2 = tuple(Edge)
+        for x, y in [(vertex1, vertex2), (vertex2, vertex1)]:
+            if x in self._graph_dict:
+                self._graph_dict[x].add(y)
+            else:
+                self._graph_dict[x] = [y]
+    def __generate_edges(self):
+        Edges = []
+        for vertex in self._graph_dict:
+            for neighbour in self._graph_dict[vertex]:
+                if {neighbour, vertex} not in Edges:
+                    Edges.append({vertex, neighbour})
+        return Edges
+    def __iter__(self):
+        self._iter_obj = iter(self._graph_dict)
+        return self._iter_obj    
+    def __next__(self):
+        return next(self._iter_obj)
+    def __str__(self):
+        res = "vertices: "
+        for k in self._graph_dict:
+            res += str(k) + " "
+        res += "\nedges: "
+        for edge in self.__generate_edges():
+            res += str(edge) + " "
+        return res
+print("Here is the Graph:")
+g = { "a" : {"c"},
+      "b" : {"c", "e"},
+      "c" : {"a", "b", "d", "e"},
+      "d" : {"c"},
+      "e" : {"c", "b"},
+      "f" : {}
+}
+graph = Graph(g)    
+for Vertice in graph:
+    print(f"Edges of vertice {Vertice}: ", graph.edges(Vertice))
+#    Output-
+#    Here is the Graph:
+#Edges of vertice a:  {'c'}
+#Edges of vertice b:  {'e', 'c'}
+#Edges of vertice c:  {'b', 'd', 'a', 'e'}
+#Edges of vertice d:  {'c'}
+#Edges of vertice e:  {'b', 'c'}
+#Edges of vertice f:  {}
