@@ -1,0 +1,112 @@
+//Graph
+#include <iostream>
+using namespace std;
+struct Node 
+{
+    int Dest;
+    struct Node* NEXT;
+};
+struct AdjList 
+{
+    struct Node* head;
+};
+struct Graph
+{
+    int V;
+    struct AdjList* array;
+};
+struct Node* newAdjListNode(int Dest)
+{
+    struct Node* newNode= (struct Node*)malloc(
+            sizeof(struct Node));
+    newNode->Dest = Dest;
+    newNode->NEXT = NULL;
+    return newNode;
+}
+struct Graph* createGraph(int V)
+{
+    struct Graph* graph
+        = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->array = (struct AdjList*)malloc(
+        V * sizeof(struct AdjList));
+    int i;
+    for (i = 0; i < V; ++i)
+        graph->array[i].head = NULL;
+    return graph;
+}
+void AddEdge(struct Graph* graph, int SRC, int Dest)
+{
+    struct Node* check = NULL;
+    struct Node* newNode = newAdjListNode(Dest);
+    if (graph->array[SRC].head == NULL) 
+    {
+        newNode->NEXT = graph->array[SRC].head;
+        graph->array[SRC].head = newNode;
+    }
+    else 
+    {
+        check = graph->array[SRC].head;
+        while (check->NEXT != NULL) 
+        {
+            check = check->NEXT;
+        }
+        check->NEXT = newNode;
+    }
+    newNode = newAdjListNode(SRC);
+    if (graph->array[Dest].head == NULL) 
+    {
+        newNode->NEXT = graph->array[Dest].head;
+        graph->array[Dest].head = newNode;
+    }
+    else
+    {
+        check = graph->array[Dest].head;
+        while (check->NEXT != NULL) 
+        {
+            check = check->NEXT;
+        }
+        check->NEXT = newNode;
+    }
+}
+void printGraph(struct Graph* graph)
+{
+    int v;
+    for (v = 0; v < graph->V; ++v) {
+        struct Node* Crawl = graph->array[v].head;
+        cout<<"Adjacency list of vertex "<<v <<" head "<<endl;
+        while (Crawl) 
+        {
+            printf("%d->", Crawl->Dest);
+            Crawl = Crawl->NEXT;
+        }
+        cout<<"\n";
+    }
+}
+int main()
+{
+    int V = 5;
+    cout<<"Here is the Graph:\n";
+    struct Graph* graph = createGraph(V);
+    AddEdge(graph, 0, 1);
+    AddEdge(graph, 0, 4);
+    AddEdge(graph, 1, 2);
+    AddEdge(graph, 1, 3);
+    AddEdge(graph, 1, 4);
+    AddEdge(graph, 2, 3);
+    AddEdge(graph, 3, 4);
+    printGraph(graph);
+    return 0;
+}
+//Outpout-
+//Here is the Graph:
+//Adjacency list of vertex 0 head 
+//1->4->
+//Adjacency list of vertex 1 head 
+//0->2->3->4->
+//Adjacency list of vertex 2 head 
+//1->3->
+//Adjacency list of vertex 3 head 
+//1->2->4->
+//Adjacency list of vertex 4 head 
+//0->1->3->
