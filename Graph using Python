@@ -56,7 +56,7 @@ g = { "a" : {"c"},
 graph = Graph(g)    
 for Vertice in graph:
     print(f"Edges of vertice {Vertice}: ", graph.edges(Vertice))
-#    Output-
+#    Output->
 #    Here is the Graph:
 #Edges of vertice a:  {'c'}
 #Edges of vertice b:  {'e', 'c'}
